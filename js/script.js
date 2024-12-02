@@ -65,7 +65,13 @@ function advanceSnake () {
         y: snake[0].y + dy
     };
     snake.unshift(head); //Add new head
-    snake.pop(); // Remove tail
+
+    //if the snake eats food, don't remove the tail, just keep it
+    if (head.x === foodX && head.y === foodY) {
+        createFood();
+    } else {
+        snake.pop(); // Remove tail
+    }
 }
 
 function clearCanvas () {

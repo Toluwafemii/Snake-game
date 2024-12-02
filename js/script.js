@@ -19,6 +19,8 @@ let dy = 0;  // Vertical velocity
 
 let gameInterval;
 
+let score = 0;
+
 // Food coordinates
 let foodX;
 let foodY;
@@ -71,9 +73,12 @@ function advanceSnake () {
     //if the snake eats food, don't remove the tail, just keep it
     if (head.x === foodX && head.y === foodY) {
         createFood();
+        score += 10; 
+        updateScoreDisplay(); //Update score display
     } else {
         snake.pop(); // Remove tail
     }
+
 }
 
 function clearCanvas () {
@@ -135,12 +140,23 @@ function randomTen (min, max) {
     ];
     dx = 10;
     dy = 0;
+    score = 0; // Reset the score
+    updateScoreDisplay(); // update the score display
 
     // Generate new food
     createFood();
 
     // Restart the game loop
     gameInterval = setInterval(gameLoop, 100);
+ }
+
+ function updateScoreDisplay () {
+    const scoreElement = document.getElementById('score');
+    if (scoreElement) {
+        scoreElement.innerHTML = score;
+    } else {
+        console.error("Score element with id 'score' not found in the HTML.");
+    }
  }
 
 // Main game loop

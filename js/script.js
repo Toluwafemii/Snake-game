@@ -1,5 +1,5 @@
 
-alert ('js is linked');
+alert ('You\'re about to start the best Game of the year.');
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
@@ -16,6 +16,33 @@ let snake = [
 
 let dx = 10; // Horizontal velocity
 let dy = 0;  // Vertical velocity
+
+document.addEventListener("keydown", function (event) {
+    const LEFT_KEY = 37;
+    const RIGHT_KEY = 39;
+    const UP_KEY = 38;
+    const DOWN_KEY = 40;
+
+    const keyPressed = event.keyCode;
+    const goingUp = dy === -10;
+    const goingDown = dy === 10;
+    const goingRight = dx === 10; 
+    const goingLeft = dx === -10;
+
+    if (keyPressed === LEFT_KEY && !goingRight) {
+        dx = -10;
+        dy = 0;
+    } else if (keyPressed === UP_KEY && !goingDown) {
+        dx = 0;
+        dy = -10;
+    } else if (keyPressed === RIGHT_KEY && !goingLeft) {
+        dx = 10;
+        dy = 0;
+    } else if (keyPressed === DOWN_KEY && !goingUp) {
+        dx = 0;
+        dy = 10;
+    }
+});
 
 function drawSnakePart(snakePart) {  
     ctx.fillStyle = 'lightgreen';  // fill color
@@ -41,21 +68,22 @@ function advanceSnake () {
 function clearCanvas () {
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black";
-    ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    ctx.strokeStyle(0, 0, gameCanvas.width, gameCanvas.height);
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.strokeRect(0, 0, c.width, c.height);
 }
 
-// Move on step to the 
-advanceSnake()
+// Main game loop
+function gameLoop() {
+    clearCanvas();  
+    advanceSnake();  
+    drawSnake();
+}
 
-// Draw the snake on the canvas
-drawSnake();
+// Start the game loop
+setInterval(gameLoop, 1000);
 
-// Change direction to move up
-dx = 0;
-dy = -10;
+function randomTen (min, max) {
+    
+}
 
-// Move one step 
-advanceSnake();
-drawSnake();
 

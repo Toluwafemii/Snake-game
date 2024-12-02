@@ -17,6 +17,8 @@ let snake = [
 let dx = 10; // Horizontal velocity
 let dy = 0;  // Vertical velocity
 
+let gameInterval;
+
 // Food coordinates
 let foodX;
 let foodY;
@@ -103,17 +105,56 @@ function randomTen (min, max) {
      ctx.strokeRect(foodX, foodY, 10, 10);
  }
 
+ function checkCollision () {
+    const head = snake [0];
+
+    // Check if the head collides with canvas boundries
+    const hitLeftWall = head.x < 0;
+    const hitRightWall = head.x >= c.width;
+    const hitTopWall = head.y < 0;
+    const hitBottomWall = head.y >= c.height;
+
+    if (hitLeftWall ||
+        hitRightWall ||
+        hitTopWall ||
+        hitBottomWall
+    ){
+        clearInterval(gameInterval); // stop the game
+        resetGame(); // Restart the game
+    }
+ }
+
+ function resetGame() {
+    // Reset snake to initial position and size
+    snake = [  
+        {x: 150, y: 150},  
+        {x: 140, y: 150},  
+        {x: 130, y: 150},  
+        {x: 120, y: 150},  
+        {x: 110, y: 150},
+    ];
+    dx = 10;
+    dy = 0;
+
+    // Generate new food
+    createFood();
+
+    // Restart the game loop
+    gameInterval = setInterval(gameLoop, 100);
+ }
+
 // Main game loop
 function gameLoop() {
     clearCanvas();  
     advanceSnake();  
     drawSnake();
     drawFood();
+    checkCollision();
 }
 
 // Start the game loop
 createFood();
-setInterval(gameLoop, 100);
+gameInterval = setInterval(gameLoop, 100);
 
 
 

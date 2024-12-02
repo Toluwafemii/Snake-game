@@ -17,6 +17,10 @@ let snake = [
 let dx = 10; // Horizontal velocity
 let dy = 0;  // Vertical velocity
 
+// Food coordinates
+let foodX;
+let foodY;
+
 document.addEventListener("keydown", function (event) {
     const LEFT_KEY = 37;
     const RIGHT_KEY = 39;
@@ -47,7 +51,6 @@ document.addEventListener("keydown", function (event) {
 function drawSnakePart(snakePart) {  
     ctx.fillStyle = 'lightgreen';  // fill color
     ctx.strokeStyle = 'darkgreen'; // Outline color
-
     ctx.fillRect(snakePart.x, snakePart.y, 10, 10);  
     ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
 }
@@ -72,18 +75,40 @@ function clearCanvas () {
     ctx.strokeRect(0, 0, c.width, c.height);
 }
 
+function randomTen (min, max) {
+    return Math.round((Math.random() * (max-min) + min) / 10) * 10; 
+ }
+ 
+ function createFood () {
+     foodX = randomTen(0, c.width - 10);
+     foodY = randomTen(0, c.height - 10);
+ 
+    // Ensures the food does not appear on the snake
+    snake.forEach(function isFoodOnSnake(part) {
+     const foodIsOnSnake = part.x === foodX && part.y === foodY;
+     if (foodIsOnSnake) createFood();
+ });
+ }
+ 
+ function drawFood() {
+     ctx.fillStyle = 'red';
+     ctx.strokeStyle = 'darkred';
+     ctx.fillRect(foodX, foodY, 10, 10);
+     ctx.strokeRect(foodX, foodY, 10, 10);
+ }
+
 // Main game loop
 function gameLoop() {
     clearCanvas();  
     advanceSnake();  
     drawSnake();
+    drawFood();
 }
 
 // Start the game loop
-setInterval(gameLoop, 1000);
+createFood();
+setInterval(gameLoop, 100);
 
-function randomTen (min, max) {
-    
-}
+
 
 
